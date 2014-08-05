@@ -30,7 +30,7 @@ var _ = Describe("Mixpanel", func() {
 						"reward": "Nexus5",
 					},
 				}
-				output := service.Parse(in)
+				output, _ := service.Parse(in)
 
 				expect := map[string]interface{}{
 					"event": "view",

@@ -13,3 +13,7 @@ type Service interface {
 	Send(in Input) Output
 	GetName() string
 }
+
+type Network interface {
+	Request(url string, data string) string
+}

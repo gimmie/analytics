@@ -3,6 +3,7 @@ package services
 import "encoding/json"
 
 type Mixpanel struct {
+	Caller Network
 }
 
 func (m *Mixpanel) Parse(in Input) (string, error) {

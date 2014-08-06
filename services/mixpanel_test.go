@@ -14,7 +14,14 @@ type MockNetwork struct {
 	Data string
 }
 
-func (m MockNetwork) Request(url string, data string) string {
+func (m *MockNetwork) Request(url string, data string) string {
+
+	// url + "?" +  data
+	// url: https://api.mixpanel.com/track/
+	// data: data=somethingelse
+	// will call https://api.mixpanel.com/track/?data=somethingelse
+	// and if call is success, return 200
+
 	m.Url = url
 	m.Data = data
 	return "200"
@@ -23,13 +30,13 @@ func (m MockNetwork) Request(url string, data string) string {
 var _ = Describe("Mixpanel", func() {
 
 	var (
-		service Mixpanel
-		network Network
+		service     Mixpanel
+		mockNetwork MockNetwork
 	)
 
 	BeforeEach(func() {
-		network = MockNetwork{}
-		service = Mixpanel{network}
+		mockNetwork = MockNetwork{}
+		service = Mixpanel{&mockNetwork}
 	})
 
 	Describe("Mixpanel", func() {
@@ -54,9 +61,7 @@ var _ = Describe("Mixpanel", func() {
 
 				Expect(output.Success).To(Equal(true))
 
-				mock, _ := network.(MockNetwork)
-				Expect(mock.Url).To(Equal("https://api.mixpanel.com/track/"))
-
+				Expect(mockNetwork.Url).To(Equal("https://api.mixpanel.com/track/"))
 				expect := map[string]interface{}{
 					"event": "view",
 					"properties": map[string]interface{}{
@@ -64,7 +69,7 @@ var _ = Describe("Mixpanel", func() {
 					},
 				}
 				data, _ := json.Marshal(expect)
-				Expect(mock.Data).To(Equal(base64.StdEncoding.EncodeToString(data)))
+				Expect(mockNetwork.Data).To(Equal("data=" + base64.StdEncoding.EncodeToString(data)))
 
 			})
 
@@ -89,7 +94,7 @@ var _ = Describe("Mixpanel", func() {
 					},
 				}
 				data, _ := json.Marshal(expect)
-				Expect(output).To(Equal(string(data)))
+				Expect(output).To(Equal(data))
 
 			})
 

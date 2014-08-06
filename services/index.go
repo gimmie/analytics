@@ -11,4 +11,5 @@ type Output struct {
 
 type Service interface {
 	Send(in Input) Output
+	GetName() string
 }

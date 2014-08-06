@@ -19,6 +19,10 @@ func (m MockService) Send(in Input) Output {
 	return Output{true}
 }
 
+func (m MockService) GetName() string {
+	return m.Name
+}
+
 var _ = Describe("Aggregator", func() {
 
 	var (

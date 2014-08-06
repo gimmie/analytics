@@ -20,7 +20,7 @@ var _ = Describe("Mixpanel", func() {
 
 	Describe("Mixpanel", func() {
 
-		Context("#ParseInput", func() {
+		Context("#Parse", func() {
 
 			It("Should return JSON string with mixpanel properties", func() {
 

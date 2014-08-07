@@ -1,8 +1,7 @@
-package app_test
+package services_test
 
 import (
 	"encoding/json"
-	. "github.com/llun/analytics"
 	. "github.com/llun/analytics/services"
 
 	. "github.com/onsi/ginkgo"

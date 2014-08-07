@@ -1,8 +1,7 @@
-package app
+package services
 
 import (
 	"encoding/json"
-	. "github.com/llun/analytics/services"
 )
 
 type Aggregator struct {

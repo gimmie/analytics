@@ -11,10 +11,10 @@ import (
 
 func main() {
 	// Real Network interface
-	network := MockNetwork{}
+	network := NetworkWrapper{}
 
-	mixpanel := Mixpanel{&network}
-	ga := GA{&network}
+	mixpanel := Mixpanel{network}
+	ga := GA{network}
 	aggregator := Aggregator{[]Service{mixpanel, ga}}
 
 	m := martini.Classic()

@@ -1,7 +1,6 @@
 package services_test
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	. "github.com/llun/analytics/services"
 
@@ -46,22 +45,27 @@ var _ = Describe("Mixpanel", func() {
 			Expect(output.Success).To(Equal(true))
 
 			Expect(mockNetwork.Url).To(Equal("https://api.mixpanel.com/track/"))
-			expect := map[string]interface{}{
-				"event": "view",
-				"properties": map[string]interface{}{
-					"reward": "Nexus5",
-					"token":  "token",
-				},
-			}
-			data, _ := json.Marshal(expect)
-			Expect(mockNetwork.Data).To(Equal("data=" + base64.StdEncoding.EncodeToString(data)))
-
+			Expect(mockNetwork.Data).To(ContainSubstring("data="))
 		})
 
-		It("should return error when Mixpanel returns 400", func() {
+		It("should return error when Mixpanel returns 0", func() {
 			mockNetwork = MockNetwork{
 				MockStatus: 200,
 				MockData:   "0",
+				MockError:  nil,
+			}
+			service = Mixpanel{&mockNetwork, "token"}
+
+			in := GetMockInput()
+			output := service.Send(in)
+
+			Expect(output.Success).To(Equal(false))
+		})
+
+		It("should return error when Mixpanel goes down", func() {
+			mockNetwork = MockNetwork{
+				MockStatus: 503,
+				MockData:   "",
 				MockError:  nil,
 			}
 			service = Mixpanel{&mockNetwork, "token"}

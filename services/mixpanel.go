@@ -27,6 +27,6 @@ func (m Mixpanel) GetName() string {
 
 func (m Mixpanel) Send(input Input) Output {
 	data, _ := m.Parse(input)
-	m.Network.Request("https://api.mixpanel.com/track/", "data="+base64.StdEncoding.EncodeToString(data))
-	return Output{Success: true}
+	status, resp, _ := m.Network.Request("https://api.mixpanel.com/track/", "data="+base64.StdEncoding.EncodeToString(data))
+	return Output{Success: resp == "1" && status == 200}
 }

@@ -8,6 +8,7 @@ import (
 type Input struct {
 	Event string
 	Data  map[string]interface{}
+	IP    string
 }
 
 type Output struct {

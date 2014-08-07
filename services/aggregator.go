@@ -8,7 +8,7 @@ type Aggregator struct {
 	Services []Service
 }
 
-func (a *Aggregator) Send(v map[string]interface{}) string {
+func (a *Aggregator) Send(v map[string]interface{}, ip string) string {
 	event, hasName := v["event"].(string)
 	data, hasData := v["data"].(map[string]interface{})
 
@@ -21,10 +21,10 @@ func (a *Aggregator) Send(v map[string]interface{}) string {
 		bytes, _ := json.Marshal(prepare)
 		return string(bytes)
 	}
-
+	in := Input{event, data, ip}
 	prepare["success"] = true
 	for _, service := range a.Services {
-		output := service.Send(Input{event, data})
+		output := service.Send(in)
 
 		services, _ := prepare["services"].(map[string]interface{})
 		services[service.GetName()] = output.Success

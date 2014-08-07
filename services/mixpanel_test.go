@@ -85,21 +85,17 @@ var _ = Describe("Mixpanel", func() {
 			service = Mixpanel{&mockNetwork, "token"}
 		})
 
-		It("should return JSON string with mixpanel properties", func() {
+		It("should return JSON string with mixpanel token and request ip", func() {
 
-			in := Input{
-				Event: "view",
-				Data: map[string]interface{}{
-					"reward": "Nexus5",
-				},
-			}
+			in := GetMockInput()
 			output, _ := service.Parse(in)
 
 			expect := map[string]interface{}{
-				"event": "view",
+				"event": "view_reward",
 				"properties": map[string]interface{}{
 					"reward": "Nexus5",
 					"token":  "token",
+					"$ip":    in.IP,
 				},
 			}
 			data, _ := json.Marshal(expect)

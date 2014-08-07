@@ -28,6 +28,7 @@ func GetMockInput() Input {
 		Data: map[string]interface{}{
 			"reward": "Nexus5",
 		},
+		IP: "127.0.0.0",
 	}
 	return in
 }

@@ -12,9 +12,8 @@ import (
 func main() {
 	network := NetworkWrapper{}
 
-	mixpanel := Mixpanel{network}
-	ga := GA{network}
-	aggregator := Aggregator{[]Service{mixpanel, ga}}
+	mixpanel := Mixpanel{network, "6c36dc9fae269f3db57ca151b47aa859"}
+	aggregator := Aggregator{[]Service{mixpanel}}
 
 	m := martini.Classic()
 	m.Post("/send", func(res http.ResponseWriter, req *http.Request) {
@@ -28,9 +27,9 @@ func main() {
 		if err != nil {
 			panic(-1)
 		}
-		log.Println(input)
+		log.Println(req.RemoteAddr)
 
-		fmt.Fprintf(res, aggregator.Send(input))
+		fmt.Fprintf(res, aggregator.Send(input, req.RemoteAddr))
 	})
 	m.Run()
 }

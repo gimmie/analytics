@@ -13,40 +13,33 @@ type MockService struct {
 	Data Input
 }
 
-func (m MockService) Send(in Input) Output {
+func (m *MockService) Send(in Input) Output {
 	m.Data = in
 	return Output{true}
 }
 
-func (m MockService) GetName() string {
+func (m *MockService) GetName() string {
 	return m.Name
 }
 
 var _ = Describe("Aggregator", func() {
-
-	var (
-		aggregator Aggregator
-		services   []Service
-	)
-
-	BeforeEach(func() {
-		services = []Service{
-			MockService{"service1", Input{}},
-			MockService{"service2", Input{}},
-		}
-		aggregator = Aggregator{services}
-	})
 
 	Describe("Aggregator", func() {
 
 		Context("#Send", func() {
 
 			It("should create input and send to every services under it", func() {
+				services := []Service{
+					&MockService{"service1", Input{}},
+					&MockService{"service2", Input{}},
+				}
+				aggregator := Aggregator{services}
+
 				prepare := make(map[string]interface{})
 				data := []byte(`{"event":"view","data":{"key1":"value1","key2":"value2"}}`)
 				json.Unmarshal(data, &prepare)
 
-				output := aggregator.Send(prepare)
+				output := aggregator.Send(prepare, "127.0.0.1")
 
 				expect := map[string]interface{}{
 					"success": true,
@@ -57,6 +50,22 @@ var _ = Describe("Aggregator", func() {
 				}
 				bytes, _ := json.Marshal(expect)
 				Expect(string(bytes)).To(Equal(output))
+			})
+
+			It("should forward client ip to services", func() {
+
+				mockService := MockService{Name: "service"}
+				services := []Service{&mockService}
+				aggregator := Aggregator{services}
+
+				prepare := make(map[string]interface{})
+				data := []byte(`{"event":"view","data":{"key1":"value1","key2":"value2"}}`)
+				json.Unmarshal(data, &prepare)
+
+				aggregator.Send(prepare, "127.0.0.1")
+
+				Expect(mockService.Data.IP).To(Equal("127.0.0.1"))
+
 			})
 
 		})

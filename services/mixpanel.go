@@ -12,6 +12,7 @@ type Mixpanel struct {
 
 func (m *Mixpanel) Parse(in Input) ([]byte, error) {
 	in.Data["token"] = m.Token
+	in.Data["$ip"] = in.IP
 	prepare := map[string]interface{}{
 		"event":      in.Event,
 		"properties": in.Data,

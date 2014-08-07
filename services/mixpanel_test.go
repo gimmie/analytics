@@ -18,7 +18,7 @@ var _ = Describe("Mixpanel", func() {
 
 	BeforeEach(func() {
 		mockNetwork = MockNetwork{}
-		service = Mixpanel{&mockNetwork}
+		service = Mixpanel{&mockNetwork, "token"}
 	})
 
 	Context("#GetName", func() {
@@ -46,11 +46,15 @@ var _ = Describe("Mixpanel", func() {
 				"event": "view",
 				"properties": map[string]interface{}{
 					"reward": "Nexus5",
+					"token":  "token",
 				},
 			}
 			data, _ := json.Marshal(expect)
 			Expect(mockNetwork.Data).To(Equal("data=" + base64.StdEncoding.EncodeToString(data)))
 
+		})
+
+		It("should echo succes=true from Mixpanel.com", func() {
 		})
 
 	})
@@ -71,6 +75,7 @@ var _ = Describe("Mixpanel", func() {
 				"event": "view",
 				"properties": map[string]interface{}{
 					"reward": "Nexus5",
+					"token":  "token",
 				},
 			}
 			data, _ := json.Marshal(expect)

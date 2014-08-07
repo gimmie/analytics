@@ -10,7 +10,6 @@ import (
 )
 
 func main() {
-	// Real Network interface
 	network := NetworkWrapper{}
 
 	mixpanel := Mixpanel{network}

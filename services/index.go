@@ -1,6 +1,7 @@
 package services
 
 import (
+	"io/ioutil"
 	"net/http"
 )
 
@@ -19,13 +20,20 @@ type Service interface {
 }
 
 type Network interface {
-	Request(url string, data string) string
+	Request(url string, data string) (status int, body string, err error)
 }
 
 type NetworkWrapper struct {
 }
 
-func (n NetworkWrapper) Request(url string, data string) string {
-	resp, _ := http.Get(url + "?" + data)
-	return string(resp.StatusCode)
+func (n NetworkWrapper) Request(url string, data string) (int, string, error) {
+	resp, err := http.Get(url + "?" + data)
+	if err != nil {
+		return 0, "", err
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	return resp.StatusCode, string(body), err
 }

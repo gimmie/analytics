@@ -6,7 +6,7 @@ type MockNetwork struct {
 	Status string
 }
 
-func (m *MockNetwork) Request(url string, data string) string {
+func (m *MockNetwork) Request(url string, data string) (status int, body string, err error) {
 
 	// url + "?" +  data
 	// url: https://api.mixpanel.com/track/
@@ -16,7 +16,7 @@ func (m *MockNetwork) Request(url string, data string) string {
 
 	m.Url = url
 	m.Data = data
-	return "200"
+	return 200, "", nil
 }
 
 func GetMockInput() Input {

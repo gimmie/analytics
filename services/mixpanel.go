@@ -7,9 +7,11 @@ import (
 
 type Mixpanel struct {
 	Network Network
+	Token   string
 }
 
 func (m *Mixpanel) Parse(in Input) ([]byte, error) {
+	in.Data["token"] = m.Token
 	prepare := map[string]interface{}{
 		"event":      in.Event,
 		"properties": in.Data,

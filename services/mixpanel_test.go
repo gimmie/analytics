@@ -16,12 +16,13 @@ var _ = Describe("Mixpanel", func() {
 		mockNetwork MockNetwork
 	)
 
-	BeforeEach(func() {
-		mockNetwork = MockNetwork{}
-		service = Mixpanel{&mockNetwork, "token"}
-	})
-
 	Context("#GetName", func() {
+
+		BeforeEach(func() {
+			mockNetwork = MockNetwork{}
+			service = Mixpanel{&mockNetwork, "token"}
+		})
+
 		It("should return mixpanel as name", func() {
 			name := service.GetName()
 			Expect(name).To(Equal("MixPanel"))
@@ -31,12 +32,15 @@ var _ = Describe("Mixpanel", func() {
 	Context("#Send", func() {
 
 		It("should do a get request mixpanel api with base64 encoding data", func() {
-			in := Input{
-				Event: "view",
-				Data: map[string]interface{}{
-					"reward": "Nexus5",
-				},
+
+			mockNetwork = MockNetwork{
+				MockStatus: 200,
+				MockData:   "1",
+				MockError:  nil,
 			}
+			service = Mixpanel{&mockNetwork, "token"}
+
+			in := GetMockInput()
 			output := service.Send(in)
 
 			Expect(output.Success).To(Equal(true))
@@ -54,12 +58,28 @@ var _ = Describe("Mixpanel", func() {
 
 		})
 
-		It("should echo succes=true from Mixpanel.com", func() {
+		It("should return error when Mixpanel returns 400", func() {
+			mockNetwork = MockNetwork{
+				MockStatus: 200,
+				MockData:   "0",
+				MockError:  nil,
+			}
+			service = Mixpanel{&mockNetwork, "token"}
+
+			in := GetMockInput()
+			output := service.Send(in)
+
+			Expect(output.Success).To(Equal(false))
 		})
 
 	})
 
 	Context("#Parse", func() {
+
+		BeforeEach(func() {
+			mockNetwork = MockNetwork{}
+			service = Mixpanel{&mockNetwork, "token"}
+		})
 
 		It("should return JSON string with mixpanel properties", func() {
 

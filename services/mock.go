@@ -1,9 +1,12 @@
 package services
 
 type MockNetwork struct {
-	Url    string
-	Data   string
-	Status string
+	Url  string
+	Data string
+
+	MockStatus int
+	MockData   string
+	MockError  error
 }
 
 func (m *MockNetwork) Request(url string, data string) (status int, body string, err error) {
@@ -16,7 +19,7 @@ func (m *MockNetwork) Request(url string, data string) (status int, body string,
 
 	m.Url = url
 	m.Data = data
-	return 200, "", nil
+	return m.MockStatus, m.MockData, m.MockError
 }
 
 func GetMockInput() Input {

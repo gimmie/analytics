@@ -1,0 +1,30 @@
+{
+	"ImportPath": "github.com/gimmie/analytics",
+	"GoVersion": "go1.3",
+	"Deps": [
+		{
+			"ImportPath": "github.com/codegangsta/inject",
+			"Comment": "v1.0-rc1-4-g4b81725",
+			"Rev": "4b8172520a03fa190f427bbd284db01b459bfce7"
+		},
+		{
+			"ImportPath": "github.com/go-martini/martini",
+			"Comment": "v1.0-29-g4957faa",
+			"Rev": "4957faa90266615eb356bd0863e9ba7069a1c315"
+		},
+		{
+			"ImportPath": "github.com/llun/analytics/services",
+			"Rev": "3062abec18ee0cced31ff80352c408e2cbc324c9"
+		},
+		{
+			"ImportPath": "github.com/onsi/ginkgo",
+			"Comment": "v1.1.0",
+			"Rev": "aa7870df5380d9da6904a29ba19e208694e0d0c1"
+		},
+		{
+			"ImportPath": "github.com/onsi/gomega",
+			"Comment": "v1.0",
+			"Rev": "a78ae492d53aad5a7a232d0d0462c14c400e3ee7"
+		}
+	]
+}

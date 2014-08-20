@@ -32,3 +32,17 @@ func GetMockInput() Input {
 	}
 	return in
 }
+
+type MockService struct {
+	Name string
+	Data Input
+}
+
+func (m *MockService) Send(in Input) Output {
+	m.Data = in
+	return Output{true}
+}
+
+func (m *MockService) GetName() string {
+	return m.Name
+}

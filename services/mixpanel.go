@@ -22,11 +22,11 @@ func (m *Mixpanel) Parse(in Input) ([]byte, error) {
 	return bytes, err
 }
 
-func (m Mixpanel) GetName() string {
+func (m *Mixpanel) GetName() string {
 	return "MixPanel"
 }
 
-func (m Mixpanel) Send(input Input) Output {
+func (m *Mixpanel) Send(input Input) Output {
 	data, _ := m.Parse(input)
 	status, resp, _ := m.Network.Request("https://api.mixpanel.com/track/", "data="+base64.StdEncoding.EncodeToString(data))
 	return Output{Success: resp == "1" && status == 200}

@@ -7,13 +7,20 @@ import (
 	. "github.com/llun/analytics/services"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
+
+	mixpanelKey := os.Getenv("mixpanel")
+	if len(mixpanelKey) == 0 {
+		panic(-1)
+	}
+
 	network := NetworkWrapper{}
 
-	mixpanel := Mixpanel{network, "6c36dc9fae269f3db57ca151b47aa859"}
-	aggregator := Aggregator{[]Service{mixpanel}}
+	mixpanel := Mixpanel{network, mixpanelKey}
+	aggregator := Aggregator{[]Service{&mixpanel}}
 
 	m := martini.Classic()
 	m.Post("/send", func(res http.ResponseWriter, req *http.Request) {
